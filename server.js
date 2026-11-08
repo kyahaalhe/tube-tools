@@ -11,8 +11,14 @@ const PORT = process.env.PORT || 3000;
 app.get("/api/youtube", handler);
 app.post("/api/feedback", express.json({ limit: "10kb" }), feedback);
 
+// Serve Vercel Analytics script
+app.get("/_vercel/analytics.js", (req, res) => {
+    res.sendFile(path.join(__dirname, "node_modules/@vercel/analytics/dist/index.js"));
+});
+
 // Every public file is listed explicitly so Vercel bundles it with the function
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "index.html")));
+app.get("/analytics.js", (req, res) => res.sendFile(path.join(__dirname, "analytics.js")));
 app.get("/analyzer.css", (req, res) => res.sendFile(path.join(__dirname, "analyzer.css")));
 app.get("/apple-touch-icon.png", (req, res) => res.sendFile(path.join(__dirname, "apple-touch-icon.png")));
 app.get("/description-checker.html", (req, res) => res.sendFile(path.join(__dirname, "description-checker.html")));
